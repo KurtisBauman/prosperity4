@@ -34,16 +34,10 @@ class Trader:
             bb, ba = self._best_bid_ask(depth)
             
             # --- PRICE DISCOVERY LOGIC ---
-            if product == "ASH_COATED_OSMIUM":
-                # Hardcoded Fair Value Logic
-                # We quote around the fair value of 10,000
-                bid_px = 9999
-                ask_px = 10001
-            else:
-                # Pennying Strategy for Pepper Root
-                if bb is None or ba is None: continue
-                bid_px = bb + 1 if ba > bb + 1 else bb
-                ask_px = ba - 1 if ba > bb + 1 else ba
+            # Removed hard-coded logic (you earn more per fill by quoting relative to the book than by quoting at a fixed price)
+            if bb is None or ba is None: continue
+            bid_px = bb + 1 if ba > bb + 1 else bb
+            ask_px = ba - 1 if ba > bb + 1 else ba
             
             # --- TRADING LIMITS & QUOTING ---
             buy_limit = params["limit"] - position
