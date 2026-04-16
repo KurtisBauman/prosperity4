@@ -10,10 +10,7 @@ pyenv virtualenv 3.12 prosperity4
 cd path/to/prosperity4
 pyenv local prosperity4
 
-# 2. Install dependencies
-pip install -r requirements.txt
-
-# 3. Clone and install the backtester (editable mode)
+# 2. Clone and install the backtester (editable mode)
 cd ..
 git clone https://github.com/isaack0ng/imc-prosperity-3-backtester.git
 cd imc-prosperity-3-backtester
@@ -34,14 +31,13 @@ data/                  # IMC-provided historical market data (committed)
     prices_round_1_day_*.csv
     trades_round_1_day_*.csv
 
-logs/                  # Your submission output (gitignored)
-  round_1/
+logs/                  # Submission output + code snapshots (committed)
+  round_N/
     MMDD-HHMM.json     # activitiesLog + profit summary
     MMDD-HHMM.log      # activitiesLog + trade records
     MMDD-HHMM.py       # code snapshot that produced this run
 
-archive/               # Frozen past-round submissions
-utils/                 # Backtesting, log parsing, visualization
+analysis/              # Log parsing, data visualization, notebooks
 ```
 
 ## Workflow
@@ -50,7 +46,6 @@ utils/                 # Backtesting, log parsing, visualization
 2. Backtest locally: `prosperity3bt trader.py 1`
 3. Upload `trader.py` to IMC
 4. Download results into `logs/round_N/` as `MMDD-HHMM.{json,log,py}`
-5. After a round closes, copy `trader.py` to `archive/round_N/trader.py`
 
 ## Modifying the Backtester
 
