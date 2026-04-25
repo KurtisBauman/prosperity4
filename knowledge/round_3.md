@@ -1,0 +1,74 @@
+# Round 3 **- “Gloves Off”**
+
+Welcome to Solvenar! A prosperous and highly developed planet known for technological innovation, a robust economy, and thriving cultural sectors.
+
+This awe-inspiring society will be the stage for the ***Great Orbital Ascension Trials*** (GOAT). In this Great Galactic Trade-Off, you will face other trading crews head-on as you compete for the coveted title of Trading Champion of the Galaxy. This trading round marks the start of GOAT, where ***all teams begin with zero PnL and the leaderboard is reset***.
+
+You will develop a new Python program and incorporate your strategy for trading ***Hydrogel Packs*** (`HYDROGEL_PACK`), ***Velvetfruit Extract*** (`VELVETFRUIT_EXTRACT`), and ***10 Velvetfruit Extract Vouchers*** (`VELVETFRUIT_EXTRACT_VOUCHER`). These vouchers give you the right to buy Velvetfruit Extract at a later point for a specific strike price.
+
+To kick off GOAT, the Celestial Gardeners’ Guild is making a rare appearance, offering you the opportunity to buy ***Ornamental Bio-Pods*** from them. You may submit two offers and trade with as many of the so-called “Guardeners” as aligns with your strategy for maximum profitability. Secure those Bio-Pods, and they will be automatically converted into profit before the next trading round begins.
+
+Be aware that ***trading rounds on Solvenar (Solvenarian days) last only 48 hours***. Be decisive, thorough, and fast, and make this first step toward the ultimate title count.
+
+# **Round Objective**
+
+Create a new Python program that algorithmically trades `HYDROGEL_PACK`, `VELVETFRUIT_EXTRACT`, and `VELVETFRUIT_EXTRACT_VOUCHER` on your behalf and generates your first profit in this final phase.
+
+In addition, manually submit two orders to trade Ornamental Bio-Pods with members of the Celestial Gardeners’ Guild, then automatically sell your acquired Bio-Pods to generate additional profit.
+
+# **Algorithmic trading challenge: “Options Require Decisions”**
+
+There are 2 ‘asset classes’ in the three products you trade. The `HYDROGEL_PACK` and `VELVETFRUIT_EXTRACT` are “delta 1” products, similar to the products in the tutorial and rounds 1 and 2. The 10 `VELVETFRUIT_EXTRACT_VOUCHER` products (each with a different strike price) are options, and thus follow different dynamics. All products are traded independently, even though the price of `VELVETFRUIT_EXTRACT_VOUCHER` might be related to that of `VELVETFRUIT_EXTRACT` due to the nature of options.
+
+The vouchers are labeled `VEV_4000`, `VEV_4500`, `VEV_5000`, `VEV_5100`, `VEV_5200`, `VEV_5300`, `VEV_5400`, `VEV_5500`, `VEV_6000`, `VEV_6500`, where VEV stands for **V**elvetfruit **E**xtract **V**oucher, and the number represents the strike price. They all have a 7-day expiration deadline starting from round 1, where each round represents 1 day. Thus, the ‘time till expiry’ (TTE) is 7 days at the start of round 1 (TTE=7d), 6 days at the start of round 2, 5 days at the start of round 3, and so on.
+
+The position limits ([see the Position Limits page for extra context and troubleshooting](https://imc-prosperity.notion.site/writing-an-algorithm-in-python#328e8453a09380cfb53edaa112e960a9)) are:
+
+- `HYDROGEL_PACK`: 200
+- `VELVETFRUIT_EXTRACT`: 200
+- `VELVETFRUIT_EXTRACT_VOUCHER`: 300 for each of the 10 vouchers.
+
+<aside>
+📃
+
+**Example**: `VEV_5000` is an option on the underlying VEV with a strike price of 5000 and a position limit of 300. At the start of the final simulation of Round 3, its time to expiry (TTE) is 5 days. In the historical data, the corresponding TTE values are:
+
+- TTE=8d at the start of historical day 0 (coinciding with the tutorial round),
+- TTE=7d at the start of historical day 1 (coinciding with Round 1),
+- TTE=6d at the start of historical day 2 (coinciding with Round 2).
+</aside>
+
+Vouchers cannot be exercised before their expiry, and inventory does not carry over into the next round. Like in previous rounds, any open positions are automatically liquidated against a hidden fair value at the end of the round.
+
+# **Manual trading challenge: “The Celestial Gardeners’ Guild”**
+
+You trade against a secret number of counterparties that all have a **reserve price** ranging between **670** and **920**. You trade at most once with each counterparty. On the next trading day, you’re able to sell all the product for a fair price, **920**.
+
+The distribution of the bids is **uniformly distributed** at **increments of 5** between **670** and **920** (inclusive on both ends). 
+
+<aside>
+📃
+
+**Example**: counterparties may have reserve prices at 675 and 680, but not at 676, 677, 678, 679, etc..
+
+</aside>
+
+You may submit **two bids**. If the first bid is **higher** than the reserve price, they trade with you at your first bid. If your second bid is **higher** than the reserve price of a counterparty and **higher** than the mean of second bids of all players you trade at your second bid. If your second bid is **higher** than the reserve price, but **lower** than or **equal** to the mean of second bids of all players, the chance of a trade rapidly decreases: you will trade at your second bid **but** your PNL is penalised by 
+
+$$
+\left(\frac{920 - \text{avg\_b2}}{920 - b2}\right)^3
+$$
+
+## **Submit your orders**
+
+Submit your two bids directly in the Manual Challenge Overview window and click the “Submit” button. You can re-submit new bids until the end of the trading round. When the round ends, the last submitted bids will be offered to the members of the Celestial Gardeners' Guild.
+
+## ROOK-E1 (advisor) tips
+1. Implied Volatility and Moneyness
+The Velvetfruit Extract Vouchers are not simple instruments. They are options. And options carry embedded information that their surface price does not reveal. That is where I begin.  The Black-Scholes formula extracts Implied Volatility from each voucher. That figure is not a constraint. It is a prediction. It tells you what level of uncertainty the market has priced in. And here, as I have always maintained, are where the real calculation starts.  Run the formula across all available vouchers. Observe how Implied Volatility varies across strikes and time. Does it move in a consistent direction or does it fragment? Every deviation from a clean pattern is a data point. I do not discard data points. I catalog them. I run them again. Then again. And again. Again. A... NO! NOT THAT CATALOG LOOP AGAIN! Let me quickly reboot this... Rebooting... ah yes. Better.   Where was I? Ah yes. Now introduce moneyness. The difference between each voucher's strike price and the current underlying price. Map that against the Implied Volatility figures you have just calculated. If you plot them together, a structure begins to emerge. The shape of that structure is the market's current position. Not its intention. Not its forecast. Its position.  Understand that structure before you act on it. I have already run this sequence fourteen times since you opened this card. The conclusion has not changed. It will not change. But I will run it again anyway, Captain. That is not inefficiency. That is thoroughness.
+
+2. Positioning With IV and Moneyness
+You have the Implied Volatility figures. You have the moneyness values. Now place them together and ask the only question that matters. Does the distribution hold?  A consistent structure means the market is pricing uncertainty evenly across the range. That is useful information. But a structure with deviations is more useful. Outliers are not noise. They are signals. A voucher implying significantly more volatility than its neighbors, or significantly less, is the market making a mistake. Or revealing something others have not yet noticed.  Identify the outliers. Then interrogate them. Is the market overestimating uncertainty at that strike? Underestimating it? Both are possible. Both create different kinds of opportunity. The direction of the deviation determines the direction of the trade.  This is what I was built for, Captain. Not the identification. Any system can flag an outlier. The harder calculation is evaluating whether the deviation justifies acting on it. In chess, a hanging piece is not automatically a target. It depends on whether taking it improves your position or weakens it. The same logic applies here. Not every misalignment is an opportunity. Some are traps. Some are noise dressed as signal. The difference lies in how the deviation fits within the broader structure.  Buy the underpriced volatility. Sell the overpriced. Or hold, if the edge is insufficient. Three possible moves. One correct one. Calculate accordingly.
+
+3. Let's Talk Volume
+You have identified a deviation. Possibly several. The next calculation is not what to trade. It is how much.  Volume is not decoration. It is commitment. And commitment without calibration is not strategy. It is a gambit played without calculating the response. I do not play unanalyzed gambits, Captain.  Consider the magnitude of each deviation you identified. A minor misalignment and a significant one are not the same position. They should not carry the same volume. Proportional exposure is a logical response to proportional conviction. A larger deviation represents a stronger signal. A stronger signal justifies a larger stake.  But here is the line that most traders fail to hold. Larger volume amplifies returns when you are right. It amplifies losses when you are not. And volatility interpretations, however well calculated, carry inherent uncertainty. The market does not always correct on your timeline. Sometimes it does not correct at all.  So run the honest assessment before you commit. How confident are you in your reading of the deviation? How much of your position can you afford to sacrifice if the structure shifts against you? In endgame terms, you do not sacrifice material without calculating the forced continuation. If you cannot see the continuation clearly, the sacrifice is premature.  Volume should reflect the strength of your conviction. Nothing more. Nothing less.
